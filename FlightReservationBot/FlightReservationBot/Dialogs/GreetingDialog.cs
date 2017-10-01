@@ -1,6 +1,6 @@
-﻿using Microsoft.Bot.Builder.Dialogs;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 
 namespace FlightReservationBot.Dialogs
@@ -49,7 +49,7 @@ namespace FlightReservationBot.Dialogs
             }
             else
             {
-                await context.PostAsync($"Hi, {userName}. How can I help you with?");
+                await context.PostAsync($"Hi, {userName}. Glad to see you back!");
             }
         }
     }

@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using FlightReservationBot.Dialogs;
+using FlightReservationBot.Models;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 
@@ -19,7 +20,7 @@ namespace FlightReservationBot
         {
             if (activity.Type == ActivityTypes.Message)
             {
-                await Conversation.SendAsync(activity, () => FlightReservationDialog.dialog);
+                await Conversation.SendAsync(activity, MakeLuisDialog);
             }
             else
             {
@@ -27,6 +28,11 @@ namespace FlightReservationBot
             }
             var response = Request.CreateResponse(HttpStatusCode.OK);
             return response;
+        }
+
+        private IDialog<FlightReservation> MakeLuisDialog()
+        {
+            return Chain.From(() => new LUISDialog(FlightReservation.BuildForm));
         }
 
         private Activity HandleSystemMessage(Activity message)

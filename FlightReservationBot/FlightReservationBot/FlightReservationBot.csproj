@@ -115,11 +115,12 @@
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Dialogs\FlightReservationDialog.cs" />
     <Compile Include="Dialogs\GreetingDialog.cs" />
-    <Compile Include="Dialogs\RootDialog.cs" />
+    <Compile Include="Dialogs\LUISDialog.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\FlightReservation.cs" />
+    <Compile Include="Models\Place.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
