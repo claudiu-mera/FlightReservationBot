@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FlightReservationBot.Helpers;
 using FlightReservationBot.Models;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.FormFlow;
@@ -80,7 +81,7 @@ namespace FlightReservationBot.Dialogs
 
                 if (entityValue == "cluj" || entityValue == "madrid" || entityValue == "paris" || entityValue == "london")
                 {
-                    await CreateHeroCardReply(context, _message, entityValue);
+                    await CreateHeroCardReply(context, _message, entityValue.Capitalize());
                     context.Wait(MessageReceived);
                     return;
                 }
