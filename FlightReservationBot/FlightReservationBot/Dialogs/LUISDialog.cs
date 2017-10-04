@@ -16,7 +16,11 @@ namespace FlightReservationBot.Dialogs
     [Serializable]
     public class LUISDialog : LuisDialog<FlightReservation>
     {
-        private readonly BuildFormDelegate<FlightReservation> ReserveFlight;
+        private static readonly List<string> availableRoutes = new List<string> { "cluj", "madrid", "paris", "london" };
+
+        private static readonly List<string> availableOptions = new List<string> { "largecabinbag", "priorityboarding", "extralegroom", "sportsequipment" };
+
+        private readonly BuildFormDelegate<FlightReservation> ReserveFlight;       
 
         [field: NonSerialized()]
         protected Activity _message;
@@ -53,7 +57,7 @@ namespace FlightReservationBot.Dialogs
             {
                 var entityValue = entity.Entity.Replace(" ", string.Empty).ToLower();
 
-                if (entityValue == "largecabinbag" || entityValue == "priorityboarding" || entityValue == "extralegroom" || entityValue == "sportsequipment")
+                if (availableOptions.Exists(o => o.Equals(entityValue)))
                 {
                     await context.PostAsync("We have that.");
                     context.Wait(MessageReceived);
@@ -79,7 +83,7 @@ namespace FlightReservationBot.Dialogs
             {
                 var entityValue = entity.Entity.ToLower();
 
-                if (entityValue == "cluj" || entityValue == "madrid" || entityValue == "paris" || entityValue == "london")
+                if (availableRoutes.Exists(p => p.Equals(entityValue)))
                 {
                     await CreateHeroCardReply(context, _message, entityValue.Capitalize());
                     context.Wait(MessageReceived);
