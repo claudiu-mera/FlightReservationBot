@@ -10,7 +10,19 @@ namespace FlightReservationBot.Dialogs
     {
         public async Task StartAsync(IDialogContext context)
         {
+            var reply = context.MakeMessage();
+
+            reply.Attachments.Add(new Attachment()
+            {
+                ContentUrl = "https://lh5.ggpht.com/TZV-dVGu3IQ6vUFDik_lWcIsFegOt8NlhhfJ4a7f7jtqeG-1ZQ8_xGvSxXdfPbW5mrv4=w300",
+                ContentType = "image/png",
+                Name = "plane.jpg"
+            });
+
+            await context.PostAsync(reply);
+
             await context.PostAsync("Hi, I'm your Flight Booking assistant.");
+
             await Respond(context);
 
             context.Wait(MessageReceivedAsync);
@@ -49,7 +61,7 @@ namespace FlightReservationBot.Dialogs
             }
             else
             {
-                await context.PostAsync($"Hi, {userName}. Glad to see you back!");
+                await context.PostAsync($"Hi, {userName}. Glad to see you!");
             }
         }
     }
