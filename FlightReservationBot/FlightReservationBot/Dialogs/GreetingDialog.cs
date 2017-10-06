@@ -14,9 +14,9 @@ namespace FlightReservationBot.Dialogs
 
             reply.Attachments.Add(new Attachment()
             {
-                ContentUrl = "https://lh5.ggpht.com/TZV-dVGu3IQ6vUFDik_lWcIsFegOt8NlhhfJ4a7f7jtqeG-1ZQ8_xGvSxXdfPbW5mrv4=w300",
+                ContentUrl = "https://flightbot.blob.core.windows.net/container/Robot-Icon.png",
                 ContentType = "image/png",
-                Name = "plane.jpg"
+                Name = "robot_icon.png"
             });
 
             await context.PostAsync(reply);
