@@ -61,7 +61,7 @@ namespace FlightReservationBot.Dialogs
                         string reply;
                         if (e.InnerException == null)
                         {
-                            reply = $"You before entering {e.Last} -- maybe you can finish next time!";
+                            reply = $"You cancelled before entering {e.Last} -- maybe you can finish next time!";
                         }
                         else
                         {
