@@ -46,7 +46,30 @@ namespace FlightReservationBot.Dialogs
         [LuisIntent("BookFlight")]
         public async Task FlightReservation(IDialogContext context, LuisResult result)
         {
-            var enrollmentForm = new FormDialog<FlightReservation>(new FlightReservation(), this.ReserveFlight, FormOptions.PromptInStart);
+            var enrollmentForm = new FormDialog<FlightReservation>(new FlightReservation(), this.ReserveFlight, FormOptions.PromptInStart)
+                .Do(async (currentContext, reservation) =>
+                {
+                    try
+                    {
+                        var completed = await reservation;
+
+                        // Actually process the reservation...
+                        await currentContext.PostAsync("Processed your reservation!");
+                    }
+                    catch (FormCanceledException<FlightReservation> e)
+                    {
+                        string reply;
+                        if (e.InnerException == null)
+                        {
+                            reply = $"You before entering {e.Last} -- maybe you can finish next time!";
+                        }
+                        else
+                        {
+                            reply = "Sorry, I've had a short circuit. Please try again.";
+                        }
+                        await currentContext.PostAsync(reply);
+                    }
+                });
             context.Call(enrollmentForm, Callback);
         }
 
