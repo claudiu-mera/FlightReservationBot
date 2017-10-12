@@ -54,7 +54,7 @@ namespace FlightReservationBot.Dialogs
                         var completed = await reservation;
 
                         // Actually process the reservation...
-                        await currentContext.PostAsync("Processed your reservation!");
+                        await currentContext.PostAsync("You are done! Your reservation was successfully processed!");
                     }
                     catch (FormCanceledException<FlightReservation> e)
                     {
