@@ -23,10 +23,10 @@ namespace FlightReservationBot.Models
     [Serializable]
     public class FlightReservation
     {
-        [Prompt("Please enter the Origin where you are flying from:")]
+        [Prompt("Please enter the Origin you are flying from:")]
         public string Origin;
 
-        [Prompt("Please enter the Destination where you are flying to:")]
+        [Prompt("Please enter the Destination you are flying to:")]
         public string Destination;
 
         [Prompt("Please enter a Departure date:")]
