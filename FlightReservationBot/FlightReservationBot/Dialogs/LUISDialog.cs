@@ -142,7 +142,7 @@ namespace FlightReservationBot.Dialogs
             {
                 Value = selectedPlace.WikiUrl,
                 Type = "openUrl",
-                Title = "WikiPedia Page"
+                Title = "Wikipedia Page"
             };
 
             cardButtons.Add(plButton);
