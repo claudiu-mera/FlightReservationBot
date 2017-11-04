@@ -22,9 +22,6 @@ namespace FlightReservationBot.Dialogs
 
         private readonly BuildFormDelegate<FlightReservation> ReserveFlight;       
 
-        [field: NonSerialized()]
-        protected Activity _message;
-
         public LUISDialog(BuildFormDelegate<FlightReservation> reserveFlight)
         {
             this.ReserveFlight = reserveFlight;
@@ -40,7 +37,21 @@ namespace FlightReservationBot.Dialogs
         [LuisIntent("Greeting")]
         public async Task Greeting(IDialogContext context, LuisResult result)
         {
-            context.Call(new GreetingDialog(), Callback);
+            //context.Call(new GreetingDialog(), Callback);
+            var reply = context.MakeMessage();
+
+            reply.Attachments.Add(new Attachment()
+            {
+                ContentUrl = "https://flightbot.blob.core.windows.net/container/Robot-Icon.png",
+                ContentType = "image/png",
+                Name = "robot_icon.png"
+            });
+
+            await context.PostAsync(reply);
+
+            await context.PostAsync("Hi, I'm your Flight Booking assistant. Glad to see you!");
+
+            context.Wait(MessageReceived);
         }
 
         [LuisIntent("BookFlight")]
@@ -108,7 +119,7 @@ namespace FlightReservationBot.Dialogs
 
                 if (availableRoutes.Exists(p => p.Equals(entityValue)))
                 {
-                    await CreateHeroCardReply(context, _message, entityValue.Capitalize());
+                    await CreateHeroCardReply(context, entityValue.Capitalize());
                     context.Wait(MessageReceived);
                     return;
                 }
@@ -125,9 +136,10 @@ namespace FlightReservationBot.Dialogs
             return;
         }
 
-        private async Task CreateHeroCardReply(IDialogContext context, Activity message, string place)
+        private async Task CreateHeroCardReply(IDialogContext context, string place)
         {
-            Activity replyToConversation = message.CreateReply($"Yes, we provide routes to/from {place}.");
+            var replyToConversation = context.MakeMessage();
+            replyToConversation.Text = $"Yes, we provide routes to/from {place}.";
             replyToConversation.AttachmentLayout = AttachmentLayoutTypes.Carousel;
             replyToConversation.Attachments = new List<Attachment>();
 
@@ -158,12 +170,6 @@ namespace FlightReservationBot.Dialogs
             replyToConversation.Attachments.Add(plAttachment);
             
             await context.PostAsync(replyToConversation);
-        }
-
-        protected override async Task MessageReceived(IDialogContext context, IAwaitable<IMessageActivity> item)
-        {
-            _message = (Activity)await item;
-            await base.MessageReceived(context, item);
         }
 
         private async Task Callback(IDialogContext context, IAwaitable<object> result)
