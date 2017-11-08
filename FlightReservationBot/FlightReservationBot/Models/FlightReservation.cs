@@ -102,6 +102,7 @@ namespace FlightReservationBot.Models
                 "Passenger name: {PassengerName} \r\r" +
                 "Check in method: {CheckIn} \r\r" +
                 "Extra services: {ExtraService} \r\r \r\r" +
+                "Total cost: 200 € \r\r \r\r" +
                 "Are you sure you want to proceed?")
                 .Build();
         }
