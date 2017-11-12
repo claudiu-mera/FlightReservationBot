@@ -97,12 +97,12 @@ namespace FlightReservationBot.Models
                 .Confirm("Flight details: \r\r \r\r" +
                 "Origin:{Origin} \r\r" +
                 "Destination:{Destination} \r\r " +
-                "Departure date:{DepartureDate} \r\r" +
-                "Return date:{ReturnDate} \r\r" +
+                "Departure date:{DepartureDate:dd MMMM yyyy} \r\r" +
+                "Return date:{ReturnDate:dd MMMM yyyy} \r\r" +
                 "Passenger name: {PassengerName} \r\r" +
                 "Check in method: {CheckIn} \r\r" +
                 "Extra services: {ExtraService} \r\r \r\r" +
-                "Total cost: 200 € \r\r \r\r" +
+                "Total cost: €200 \r\r \r\r" +
                 "Are you sure you want to proceed?")
                 .Build();
         }

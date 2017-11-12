@@ -66,6 +66,17 @@ namespace FlightReservationBot.Dialogs
 
                         // Actually process the reservation...
                         await currentContext.PostAsync("You are done! Your reservation was successfully processed!");
+
+                        var reply = currentContext.MakeMessage();
+                        reply.Attachments.Add(
+                            new Attachment()
+                            {
+                                ContentUrl = "https://blog.trabber.com/wp-content/uploads/2015/01/keep-calm-flight.png",
+                                ContentType = "image/png",
+                                Name = "safe_flight.png"
+                            });
+
+                        await currentContext.PostAsync(reply);
                     }
                     catch (FormCanceledException<FlightReservation> e)
                     {
@@ -93,7 +104,7 @@ namespace FlightReservationBot.Dialogs
 
                 if (availableOptions.Exists(o => o.Equals(entityValue)))
                 {
-                    await context.PostAsync("We have that.");
+                    await context.PostAsync("Yes, we have that.");
                     context.Wait(MessageReceived);
                     return;
                 }
