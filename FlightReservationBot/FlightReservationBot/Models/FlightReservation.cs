@@ -40,6 +40,7 @@ namespace FlightReservationBot.Models
         public CheckInOptions? CheckIn;
 
         [Prompt("What kind of Extra Options would you like? {||}")]
+        [Optional]
         public List<ExtraServiceOptions> ExtraService;
 
         public static IForm<FlightReservation> BuildForm()
@@ -84,7 +85,14 @@ namespace FlightReservationBot.Models
 
                     return result;
                 })
-                .Field(nameof(DepartureDate))
+                .Field(nameof(DepartureDate), 
+                validate: async(state, value) => {
+                    var result = new ValidateResult();
+                    result.IsValid = ((DateTime)value - DateTime.Now).Days > 0;
+                    result.Feedback = result.IsValid ? null : "Departure date must be later than current date";
+                    result.Value = (DateTime)value;
+                    return result;
+                })
                 .Field(nameof(ReturnDate), 
                 validate: async(state, value) => {
                     var result = new ValidateResult();
