@@ -30,13 +30,13 @@ namespace FlightReservationBot.Models
     [Serializable]
     public class FlightReservation
     {
-        public FlightTypeOptions? FlightType;
-
         [Prompt("Please enter the Origin you are flying from:")]
         public string Origin;
 
         [Prompt("Please enter the Destination you are flying to:")]
         public string Destination;
+
+        public FlightTypeOptions? FlightType;
 
         [Prompt("Please enter a Departure date:")]
         public DateTime DepartureDate;
@@ -57,7 +57,6 @@ namespace FlightReservationBot.Models
         {
             return new FormBuilder<FlightReservation>()
                 .Message("Welcome to Flight Booking assistant!")
-                .Field(nameof(FlightType))
                 .Field(nameof(Origin),
                 validate: async (state, value) => {
                     var result = new ValidateResult();
@@ -96,6 +95,7 @@ namespace FlightReservationBot.Models
 
                     return result;
                 })
+                .Field(nameof(FlightType))
                 .Field(nameof(DepartureDate), 
                 validate: async(state, value) => {
                     var result = new ValidateResult();
