@@ -1,4 +1,5 @@
 ﻿using Microsoft.Bot.Builder.FormFlow;
+using Microsoft.Bot.Builder.FormFlow.Advanced;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +7,12 @@ using System.Web;
 
 namespace FlightReservationBot.Models
 {
+    public enum FlightTypeOptions
+    {
+        OneWay = 1,
+        TwoWay = 2
+    }
+
     public enum CheckInOptions
     {
         Online = 1,
@@ -23,6 +30,8 @@ namespace FlightReservationBot.Models
     [Serializable]
     public class FlightReservation
     {
+        public FlightTypeOptions? FlightType;
+
         [Prompt("Please enter the Origin you are flying from:")]
         public string Origin;
 
@@ -32,6 +41,7 @@ namespace FlightReservationBot.Models
         [Prompt("Please enter a Departure date:")]
         public DateTime DepartureDate;
 
+        [Optional]
         [Prompt("Please enter a Return date:")]
         public DateTime? ReturnDate;
 
@@ -47,6 +57,7 @@ namespace FlightReservationBot.Models
         {
             return new FormBuilder<FlightReservation>()
                 .Message("Welcome to Flight Booking assistant!")
+                .Field(nameof(FlightType))
                 .Field(nameof(Origin),
                 validate: async (state, value) => {
                     var result = new ValidateResult();
@@ -93,8 +104,10 @@ namespace FlightReservationBot.Models
                     result.Value = (DateTime)value;
                     return result;
                 })
-                .Field(nameof(ReturnDate), 
-                validate: async(state, value) => {
+                .Field(nameof(ReturnDate),
+                active: ((state) => state.FlightType == FlightTypeOptions.TwoWay),
+                validate: async (state, value) =>
+                {
                     var result = new ValidateResult();
                     result.IsValid = (DateTime)value > state.DepartureDate;
                     result.Feedback = result.IsValid ? null : "Departure date cannot be later that return date";
