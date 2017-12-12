@@ -57,7 +57,7 @@ namespace FlightReservationBot.Dialogs
         [LuisIntent("BookFlight")]
         public async Task FlightReservation(IDialogContext context, LuisResult result)
         {
-            var enrollmentForm = new FormDialog<FlightReservation>(new FlightReservation(), this.ReserveFlight, FormOptions.PromptInStart)
+            var enrollmentForm = new FormDialog<FlightReservation>(new FlightReservation(context), this.ReserveFlight, FormOptions.PromptInStart)
                 .Do(async (currentContext, reservation) =>
                 {
                     try
@@ -130,7 +130,10 @@ namespace FlightReservationBot.Dialogs
 
                 if (availableRoutes.Exists(p => p.Equals(entityValue)))
                 {
-                    await CreateHeroCardReply(context, entityValue.Capitalize());
+                    var recommendedDestination = entityValue.Capitalize();
+                    context.UserData.SetValue<string>("RecommendedDestination", recommendedDestination);
+
+                    await CreateHeroCardReply(context, recommendedDestination);
                     context.Wait(MessageReceived);
                     return;
                 }

@@ -1,9 +1,12 @@
-﻿using Microsoft.Bot.Builder.FormFlow;
+﻿using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.FormFlow;
 using Microsoft.Bot.Builder.FormFlow.Advanced;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
+using System.Xml.Serialization;
 
 namespace FlightReservationBot.Models
 {
@@ -53,8 +56,23 @@ namespace FlightReservationBot.Models
         [Optional]
         public List<ExtraServiceOptions> ExtraService;
 
+        [NonSerialized]
+        private static IDialogContext Context;
+
+        public FlightReservation()
+        {
+        }
+
+        public FlightReservation(IDialogContext context)
+        {
+            Context = context;
+        }
+
         public static IForm<FlightReservation> BuildForm()
         {
+            string recommendedDestination = null;
+            Context.UserData.TryGetValue<string>("RecommendedDestination", out recommendedDestination);
+
             return new FormBuilder<FlightReservation>()
                 .Message("Welcome to Flight Booking assistant!")
                 .Field(nameof(Origin),
@@ -68,11 +86,13 @@ namespace FlightReservationBot.Models
 
                     return result;
                 })
+                .Message("We recommend you the following destination: " + recommendedDestination, 
+                condition: (state) => !string.IsNullOrEmpty(recommendedDestination))
                 .Field(nameof(Destination),
                 validate: async (state, value) => {
                     var result = new ValidateResult();
                     string destination = (string)value;
-
+                    
                     var isAvailable = Place.AvailablePlaces.Exists(p => p.Name.Equals(destination, StringComparison.OrdinalIgnoreCase));
                     var isDifferent = !destination.Equals(state.Origin, StringComparison.OrdinalIgnoreCase); 
 
