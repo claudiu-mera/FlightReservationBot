@@ -16,11 +16,15 @@ namespace FlightReservationBot.Dialogs
     [Serializable]
     public class LUISDialog : LuisDialog<FlightReservation>
     {
+        private const string BookFlightOption = "Book a flight";
+
+        private const string GetServicesOption = "Get the available services";
+
         private static readonly List<string> availableRoutes = new List<string> { "cluj", "madrid", "paris", "london" };
 
         private static readonly List<string> availableOptions = new List<string> { "largecabinbag", "priorityboarding", "extralegroom", "sportsequipment" };
 
-        private readonly BuildFormDelegate<FlightReservation> ReserveFlight;       
+        private readonly BuildFormDelegate<FlightReservation> ReserveFlight;
 
         public LUISDialog(BuildFormDelegate<FlightReservation> reserveFlight)
         {
@@ -37,62 +41,13 @@ namespace FlightReservationBot.Dialogs
         [LuisIntent("Greeting")]
         public async Task Greeting(IDialogContext context, LuisResult result)
         {
-            //context.Call(new GreetingDialog(), Callback);
-            var reply = context.MakeMessage();
-
-            reply.Attachments.Add(new Attachment()
-            {
-                ContentUrl = "https://flightbot.blob.core.windows.net/container/Robot-Icon.png",
-                ContentType = "image/png",
-                Name = "robot_icon.png"
-            });
-
-            await context.PostAsync(reply);
-
-            await context.PostAsync("Hi, I'm your Flight Booking assistant. Glad to see you!");
-
-            context.Wait(MessageReceived);
+            context.Call(new GreetingDialog(), Callback);
         }
 
         [LuisIntent("BookFlight")]
         public async Task FlightReservation(IDialogContext context, LuisResult result)
         {
-            var enrollmentForm = new FormDialog<FlightReservation>(new FlightReservation(context), this.ReserveFlight, FormOptions.PromptInStart)
-                .Do(async (currentContext, reservation) =>
-                {
-                    try
-                    {
-                        var completed = await reservation;
-
-                        // Actually process the reservation...
-                        await currentContext.PostAsync("You are done! Your reservation was successfully processed!");
-
-                        var reply = currentContext.MakeMessage();
-                        reply.Attachments.Add(
-                            new Attachment()
-                            {
-                                ContentUrl = "https://blog.trabber.com/wp-content/uploads/2015/01/keep-calm-flight.png",
-                                ContentType = "image/png",
-                                Name = "safe_flight.png"
-                            });
-
-                        await currentContext.PostAsync(reply);
-                    }
-                    catch (FormCanceledException<FlightReservation> e)
-                    {
-                        string reply;
-                        if (e.InnerException == null)
-                        {
-                            reply = $"You cancelled before entering {e.Last} -- maybe you can finish next time!";
-                        }
-                        else
-                        {
-                            reply = "Sorry, I've had a short circuit. Please try again.";
-                        }
-                        await currentContext.PostAsync(reply);
-                    }
-                });
-            context.Call(enrollmentForm, Callback);
+            this.CreateFlightReservation(context);
         }
 
         [LuisIntent("QueryExtraServices")]
@@ -150,6 +105,78 @@ namespace FlightReservationBot.Dialogs
             return;
         }
 
+        [LuisIntent("ProvideHelp")]
+        public async Task GetHelp(IDialogContext context, LuisResult result)
+        {
+            PromptDialog.Choice(context, this.OnOptionSelected, new List<string> { BookFlightOption, GetServicesOption }, "Here is what I can do for you:", "Not a valid option", 3);
+        }
+
+        private async Task OnOptionSelected(IDialogContext context, IAwaitable<string> result)
+        {
+            try
+            {
+                string optionSelected = await result;
+
+                switch (optionSelected)
+                {
+                    case BookFlightOption:
+                        this.CreateFlightReservation(context);
+                        break;
+
+                    case GetServicesOption:
+                        context.Call(new ServicesDialog(), this.Callback);
+                        break;
+                }
+            }
+            catch (TooManyAttemptsException ex)
+            {
+                await context.PostAsync($"Too many attemps. But don't worry, I'm handling that exception and you can try again!");
+
+                context.Wait(this.MessageReceived);
+            }
+        }
+
+        private void CreateFlightReservation(IDialogContext context)
+        {
+            var reservationForm = new FormDialog<FlightReservation>(new FlightReservation(context), this.ReserveFlight, FormOptions.PromptInStart)
+                .Do(async (currentContext, reservation) =>
+                {
+                    try
+                    {
+                        var completed = await reservation;
+
+                        // Actually process the reservation...
+                        await currentContext.PostAsync("You are done! Your reservation was successfully processed!");
+
+                        var reply = currentContext.MakeMessage();
+                        reply.Attachments.Add(
+                            new Attachment()
+                            {
+                                ContentUrl = "https://blog.trabber.com/wp-content/uploads/2015/01/keep-calm-flight.png",
+                                ContentType = "image/png",
+                                Name = "safe_flight.png"
+                            });
+
+                        await currentContext.PostAsync(reply);
+                    }
+                    catch (FormCanceledException<FlightReservation> e)
+                    {
+                        string reply;
+                        if (e.InnerException == null)
+                        {
+                            reply = $"You cancelled before entering {e.Last} -- maybe you can finish next time!";
+                        }
+                        else
+                        {
+                            reply = "Sorry, I've had a short circuit. Please try again.";
+                        }
+                        await currentContext.PostAsync(reply);
+                    }
+                });
+
+            context.Call(reservationForm, Callback);
+        }
+
         private async Task CreateHeroCardReply(IDialogContext context, string place)
         {
             var replyToConversation = context.MakeMessage();
@@ -182,7 +209,7 @@ namespace FlightReservationBot.Dialogs
             };
             Attachment plAttachment = plCard.ToAttachment();
             replyToConversation.Attachments.Add(plAttachment);
-            
+
             await context.PostAsync(replyToConversation);
         }
 

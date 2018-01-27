@@ -165,6 +165,7 @@
     <Compile Include="Dialogs\FlightReservationDialog.cs" />
     <Compile Include="Dialogs\GreetingDialog.cs" />
     <Compile Include="Dialogs\LUISDialog.cs" />
+    <Compile Include="Dialogs\ServicesDialog.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
