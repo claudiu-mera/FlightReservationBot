@@ -20,7 +20,7 @@ namespace FlightReservationBot.Dialogs
         {
             var replyToConversation = context.MakeMessage();
 
-            replyToConversation.AttachmentLayout =  AttachmentLayoutTypes.Carousel;
+            replyToConversation.AttachmentLayout =  AttachmentLayoutTypes.List;
             replyToConversation.Attachments = new List<Attachment>();
 
             Dictionary<string, string> cardContentList = new Dictionary<string, string>();
@@ -48,7 +48,7 @@ namespace FlightReservationBot.Dialogs
                 HeroCard plCard = new HeroCard()
                 {
                     Title = $"{cardContent.Key}",
-                    Subtitle = $"{cardContent.Key} Wikipedia Page",
+                    Subtitle = $"About {cardContent.Key}",
                     Images = cardImages,
                     Buttons = cardButtons
                 };
