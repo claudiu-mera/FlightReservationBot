@@ -20,7 +20,7 @@ namespace FlightReservationBot.Dialogs
         {
             var replyToConversation = context.MakeMessage();
 
-            replyToConversation.AttachmentLayout =  AttachmentLayoutTypes.List;
+            replyToConversation.AttachmentLayout =  AttachmentLayoutTypes.Carousel;
             replyToConversation.Attachments = new List<Attachment>();
 
             Dictionary<string, string> cardContentList = new Dictionary<string, string>();
