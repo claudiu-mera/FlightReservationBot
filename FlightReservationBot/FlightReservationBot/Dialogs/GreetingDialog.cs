@@ -21,7 +21,7 @@ namespace FlightReservationBot.Dialogs
 
             await context.PostAsync(reply);
 
-            await context.PostAsync("Hi, I'm your Flight Booking assistant. Glad to see you!");
+            await context.PostAsync("Hi, I am your Flight Booking assistant. Glad to see you!");
 
             context.Done(reply);
         }

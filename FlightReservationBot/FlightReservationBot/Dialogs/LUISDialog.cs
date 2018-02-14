@@ -22,7 +22,7 @@ namespace FlightReservationBot.Dialogs
 
         private static readonly List<string> availableRoutes = new List<string> { "cluj", "madrid", "paris", "london" };
 
-        private static readonly List<string> availableOptions = new List<string> { "largecabinbag", "priorityboarding", "extralegroom", "sportsequipment" };
+        private static readonly List<string> availableOptions = new List<string> { "largecabinbag", "priorityboarding", "extralegroom", "airporttransfer" };
 
         private readonly BuildFormDelegate<FlightReservation> ReserveFlight;
 

@@ -27,7 +27,7 @@ namespace FlightReservationBot.Dialogs
             cardContentList.Add("Large Cabin Bag", "http://norwegianairsizecabinbags.com/wp-content/uploads/2017/02/haupstadtpurplesmall-300x300.png");
             cardContentList.Add("Priority Boarding", "https://f9prodcdn.azureedge.net/media/3281/airport_countdown_clock_icon.png");
             cardContentList.Add("Extra Legroom", "https://img.static-af.com/images/media/347F169E-DD8E-4851-A229E0331DFDC3F6/source/seat-plus-300x300/?aspect_ratio=1:1");
-            cardContentList.Add("Sports Equipment", "http://investdailynews.com/wp-content/uploads/2017/02/Global-Sports-Equipment-Market.jpg");
+            cardContentList.Add("Airport Transfer", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTADaoNKlPpm1q1DtmYFAxW9oUPxkoC2oH5MxMeny59yUJWa9kQ");
 
             foreach (KeyValuePair<string, string> cardContent in cardContentList)
             {
