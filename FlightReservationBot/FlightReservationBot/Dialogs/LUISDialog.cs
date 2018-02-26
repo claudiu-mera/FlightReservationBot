@@ -34,7 +34,7 @@ namespace FlightReservationBot.Dialogs
         [LuisIntent("None")]
         public async Task None(IDialogContext context, LuisResult result)
         {
-            await context.PostAsync("I'm sorry. I don't understand what you are meaning.");
+            await context.PostAsync("I am sorry. I do not understand what you are meaning.");
             context.Wait(MessageReceived);
         }
 
@@ -65,13 +65,13 @@ namespace FlightReservationBot.Dialogs
                 }
                 else
                 {
-                    await context.PostAsync("I'm sorry. We don't have that.");
+                    await context.PostAsync("I am sorry. We do not have that.");
                     context.Wait(MessageReceived);
                     return;
                 }
             }
 
-            await context.PostAsync("I'm sorry. We don't have that.");
+            await context.PostAsync("I am sorry. We do not have that.");
             context.Wait(MessageReceived);
             return;
         }
@@ -94,13 +94,13 @@ namespace FlightReservationBot.Dialogs
                 }
                 else
                 {
-                    await context.PostAsync("I'm sorry. We don't provide routes to that place.");
+                    await context.PostAsync("I am sorry. We do not provide routes to that place.");
                     context.Wait(MessageReceived);
                     return;
                 }
             }
 
-            await context.PostAsync("I'm sorry. We don't provide routes to that place.");
+            await context.PostAsync("I am sorry. We do not provide routes to that place.");
             context.Wait(MessageReceived);
             return;
         }
@@ -130,7 +130,7 @@ namespace FlightReservationBot.Dialogs
             }
             catch (TooManyAttemptsException ex)
             {
-                await context.PostAsync($"Too many attemps. But don't worry, I'm handling that exception and you can try again!");
+                await context.PostAsync($"Too many attemps. But do not worry, I am handling that exception and you can try again!");
 
                 context.Wait(this.MessageReceived);
             }
@@ -168,7 +168,7 @@ namespace FlightReservationBot.Dialogs
                         }
                         else
                         {
-                            reply = "Sorry, I've had a short circuit. Please try again.";
+                            reply = "Sorry, I have had a short circuit. Please try again.";
                         }
                         await currentContext.PostAsync(reply);
                     }
